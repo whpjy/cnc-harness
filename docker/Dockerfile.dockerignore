@@ -1,0 +1,17 @@
+**
+!deepseek-harness-cnc/
+!deepseek-harness-cnc/**
+!seksun-cnc/
+!seksun-cnc/apps/
+!seksun-cnc/apps/api/
+!seksun-cnc/apps/api/app/
+!seksun-cnc/apps/api/app/**
+
+deepseek-harness-cnc/.git
+deepseek-harness-cnc/.dsh
+deepseek-harness-cnc/node_modules
+deepseek-harness-cnc/node_modules.*
+deepseek-harness-cnc/lib
+deepseek-harness-cnc/apps/web/dist
+deepseek-harness-cnc/**/__pycache__
+deepseek-harness-cnc/**/*.log

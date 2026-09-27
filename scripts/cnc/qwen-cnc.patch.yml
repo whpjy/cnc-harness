@@ -1,0 +1,62 @@
+- id: session-log-deepseek
+  disabled: true
+
+- id: session-telemetry-otel
+  disabled: true
+
+- id: llm-pi-ai
+  config:
+    providers:
+      dashscope-qwen:
+        displayName: Qwen 3.8 (DashScope)
+        apiKeyEnv: DASHSCOPE_API_KEY
+        api: openai-completions
+        baseURL: https://dashscope.aliyuncs.com/compatible-mode/v1
+        compat:
+          supportsDeveloperRole: false
+          maxTokensField: max_tokens
+        models:
+          - id: qwen3.8-flash
+            name: Qwen 3.8 Flash
+            contextWindow: 1048576
+            maxTokens: 65536
+            input: [text, image]
+            reasoningEfforts:
+              low: low
+              medium: medium
+              high: high
+          - id: qwen3.8-max-0902
+            name: Qwen 3.8 Max 0902
+            contextWindow: 262144
+            maxTokens: 32768
+            input: [text, image]
+            reasoningEfforts:
+              low: low
+              medium: medium
+              high: high
+
+- id: agent-default-model
+  config:
+    provider: dashscope-qwen
+    model: qwen3.8-flash
+    reasoningEffort: high
+
+- insert:
+    - id: mcp-seksun-cnc
+      name: "@deepseek-ai/dsh-mcp-client"
+      config:
+        serverName: cnc
+        transport: stdio
+        command: powershell.exe
+        args:
+          - -NoProfile
+          - -ExecutionPolicy
+          - Bypass
+          - -File
+          - "E:\\01代码位置\\Sunz\\seksun-all\\deepseek-harness-cnc\\scripts\\cnc\\run-cnc-mcp.ps1"
+        cwd: "E:\\01代码位置\\Sunz\\seksun-all\\seksun-cnc\\apps\\api"
+        env:
+          CNC_API_BASE_URL: http://127.0.0.1:8090
+          CNC_MCP_IMPORT_ROOTS: "E:\\01代码位置\\Sunz\\seksun-all;C:\\Users\\wanghang\\Documents\\deepseek-harness;C:\\Users\\wanghang\\.dsh"
+        toolCallTimeoutMs: 300000
+        failOnStartupError: true

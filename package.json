@@ -199,6 +199,11 @@
     "demo:inspector": "node --import tsx/esm apps/cli/src/bin.ts web --patch ./packages/experimental/inspector/cordis.source.patch.yml",
     "mock:llm": "node --import tsx packages/test-support/llm-mock-server/src/bin.ts",
     "start:web": "node --import tsx/esm apps/cli/src/bin.ts web",
+    "cnc:web:start": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/cnc/start-web.ps1",
+    "cnc:web:stop": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/cnc/stop-web.ps1",
+    "cnc:web:status": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/cnc/status-web.ps1",
+    "cnc:web:autostart": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/cnc/install-autostart.ps1",
+    "cnc:web:autostart:remove": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/cnc/uninstall-autostart.ps1",
     "dev:web": "tsx scripts/dev-web.ts --poll",
     "postinstall": "node scripts/install-lefthook.mjs"
   },
