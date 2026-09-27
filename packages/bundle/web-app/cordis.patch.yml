@@ -319,6 +319,11 @@
     - id: ui-tool
       name: '@deepseek-ai/dsh-client-ui-tool'
 
+    # Seksun CNC extension: compact manufacturing-tool rows and the live
+    # engineering workspace beside the original Harness conversation.
+    - id: ui-cnc-workbench
+      name: '@seksun/dsh-client-ui-cnc-workbench'
+
     - id: ui-cordis
       name: '@deepseek-ai/dsh-client-ui-cordis'
 

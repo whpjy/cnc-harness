@@ -1,5 +1,6 @@
 /** Browser entry for the Web client. */
 import '@deepseek-ai/dsh-client-ui-theme/brand-font.css'
+import './cnc-theme.css'
 import { AppWebEntry, applyIndexInjections } from '@deepseek-ai/dsh-client-web'
 
 interface DesktopBootGlobal {

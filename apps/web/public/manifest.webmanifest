@@ -1,12 +1,12 @@
 {
-  "name": "DeepSeek Harness",
-  "short_name": "DSH",
+  "name": "NEXUS CNC Agent",
+  "short_name": "NEXUS CNC",
   "start_url": "./",
   "scope": "./",
   "display": "fullscreen",
   "icons": [
     {
-      "src": "favicon.svg",
+      "src": "cnc-mark.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"

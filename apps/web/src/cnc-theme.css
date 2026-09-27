@@ -1,0 +1,81 @@
+:root {
+  --cnc-blue: #3f63ee;
+  --cnc-blue-strong: #2749cc;
+  --cnc-mint: #28c99a;
+  --cnc-ink: #17243d;
+  --cnc-canvas: #edf3f8;
+  --cnc-panel: rgb(255 255 255 / 92%);
+  --cnc-line: rgb(78 103 151 / 16%);
+}
+
+html,
+body,
+#root {
+  background: var(--cnc-canvas);
+}
+
+body::before {
+  position: fixed;
+  z-index: 9999;
+  inset: 0 0 auto;
+  height: 3px;
+  content: '';
+  pointer-events: none;
+  background: linear-gradient(90deg, var(--cnc-blue-strong), var(--cnc-blue) 55%, var(--cnc-mint));
+}
+
+[data-conversation-content] {
+  background:
+    linear-gradient(rgb(255 255 255 / 78%), rgb(255 255 255 / 78%)),
+    radial-gradient(circle at 72% 18%, rgb(63 99 238 / 12%), transparent 34%),
+    var(--cnc-canvas);
+}
+
+[data-conversation-scroll] {
+  scrollbar-color: rgb(72 101 166 / 34%) transparent;
+}
+
+[data-composer-card] {
+  border-color: rgb(63 99 238 / 24%) !important;
+  border-radius: 18px !important;
+  box-shadow: 0 18px 50px rgb(28 48 88 / 12%) !important;
+}
+
+[data-step-process] {
+  border-color: var(--cnc-line) !important;
+  border-radius: 14px !important;
+  background: var(--cnc-panel) !important;
+}
+
+[data-process-activity='running'] {
+  box-shadow: inset 3px 0 var(--cnc-blue);
+}
+
+[data-chat-flow-kind='tool-call'],
+[data-chat-flow-kind='tool-result'] {
+  border-radius: 12px;
+}
+
+[data-rightbar-fullscreen] [data-conversation-content] {
+  background: #f7f9fc;
+}
+
+[data-ds-dark-theme] {
+  --cnc-ink: #edf3ff;
+  --cnc-canvas: #111827;
+  --cnc-panel: rgb(22 31 50 / 94%);
+  --cnc-line: rgb(132 159 221 / 20%);
+}
+
+[data-ds-dark-theme] [data-conversation-content] {
+  background:
+    linear-gradient(rgb(15 23 42 / 82%), rgb(15 23 42 / 82%)),
+    radial-gradient(circle at 72% 18%, rgb(76 112 255 / 18%), transparent 34%),
+    var(--cnc-canvas);
+}
+
+@media (min-width: 1180px) {
+  [data-conversation-scroll] > [data-chat-flow] {
+    max-width: 880px;
+  }
+}

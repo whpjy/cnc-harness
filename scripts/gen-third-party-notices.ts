@@ -276,7 +276,12 @@ export function virtualManifest(
   const prefix = `${name.replace('/', '+')}@`
   const entries = readdirSync(virtual)
   for (const entry of entries.filter(dir => dir.startsWith(prefix))) {
-    const manifest = JSON.parse(readFileSync(resolve(virtual, entry, 'node_modules', name, 'package.json'), 'utf8')) as VirtualManifest
+    const candidate = resolve(virtual, entry, 'node_modules', name, 'package.json')
+    // An interrupted pnpm relink can leave the virtual-store directory before
+    // its package contents exist. Ignore that incomplete entry and continue to
+    // another installed candidate instead of crashing the notices generator.
+    if (!existsSync(candidate)) continue
+    const manifest = JSON.parse(readFileSync(candidate, 'utf8')) as VirtualManifest
     if (expectedVersion === undefined || manifest.version === expectedVersion) return manifest
   }
   for (const dir of entries) {
