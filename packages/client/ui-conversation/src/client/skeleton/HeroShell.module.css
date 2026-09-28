@@ -60,28 +60,12 @@
 }
 
 .previewBadge {
-  align-self: flex-start;
-  margin-top: 2px;
-  padding: 1px 7px 0;
-  border: 0.5px solid var(--dsw-alias-interactive-bg-hover);
-  border-radius: 999px;
-  corner-shape: round;
-  background: var(--dsw-alias-state-business-tertiary);
-  color: var(--dsw-alias-label-primary-bluish);
-  font-family: var(--ds-font-family-code);
-  font-size: 12px;
-  line-height: 18px;
-  font-weight: 500;
-  white-space: nowrap;
+  display: none;
 }
 
-/* Keep hover detection on a stationary box while the mark moves within it;
-   hover rules target the hitbox so a slot-occupant mark swims too. */
+/* The CNC build presents the headline without the upstream fish mark. */
 .fishHitbox {
-  display: inline-flex;
-  flex: none;
-  align-items: center;
-  justify-content: center;
+  display: none;
 }
 
 /* The swim morph's curves poke slightly past the viewBox edges, so clipping

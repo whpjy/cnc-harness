@@ -263,8 +263,7 @@
   cursor: default;
 }
 
-/* Mark and name are independent slots; the shell owns their shared baseline,
-   spacing, and height so either occupant can vary in width. */
+/* The CNC build keeps the brand name but suppresses the upstream fish mark. */
 .brandIdentity {
   display: inline-flex;
   align-items: center;
@@ -274,9 +273,7 @@
 }
 
 .brandMark {
-  flex: none;
-  display: inline-flex;
-  align-items: center;
+  display: none;
   justify-content: center;
 }
 
@@ -349,11 +346,10 @@
   border-radius: var(--dsw-radius-md);
 }
 
-/* Rail logo swap: collapsed, the toggle rests as the whale mark (brand ink,
-   no hover circle) and hovering reveals the panel icon — the expand
-   affordance (figma sidebar-hover flow). Expanded it is a plain panel icon. */
+/* The collapsed CNC rail always exposes the panel affordance because the
+   upstream fish mark is intentionally absent. */
 .collapsed .toggle .panelIcon {
-  display: none;
+  display: inline;
 }
 
 .collapsed .toggle:hover .panelIcon {
@@ -365,9 +361,7 @@
 }
 
 .railMark {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+  display: none;
 }
 
 /* Rail icons ride the primary ink (figma rail spec); expanded keeps the

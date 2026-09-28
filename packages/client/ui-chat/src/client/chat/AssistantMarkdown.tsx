@@ -6,6 +6,7 @@ import type { MarkdownFileMentions, MarkdownPathImages } from '@deepseek-ai/dsh-
 import type { ChatNodeOwnerProps, ChatViewSlotProps, UseDisclosure, UsePresentation } from '../contract/slots.ts'
 import type { AssistantBlock } from '../contract/snapshot.ts'
 import { markdownLabels } from '../markdown-labels.ts'
+import { toSimplifiedChinese } from '../simplified-chinese.ts'
 import { ReasoningRow } from './ReasoningRow.tsx'
 import { useSearchableHidden } from './searchable-hidden.ts'
 import css from './AssistantMarkdown.module.css'
@@ -81,7 +82,7 @@ export const AssistantMarkdown = memo(function AssistantMarkdown({
         rendered.push(
           <MarkdownText
             key={i}
-            text={block.text}
+            text={toSimplifiedChinese(block.text)}
             streaming={streaming}
             labels={labels}
             fileMentions={mentions}
@@ -96,7 +97,7 @@ export const AssistantMarkdown = memo(function AssistantMarkdown({
             hidden={reasoningHidden}
             reveal={revealProcess}
           >
-            <ReasoningRow text={block.text} running={streaming && i === last} usePresentation={usePresentation}
+            <ReasoningRow text={toSimplifiedChinese(block.text)} running={streaming && i === last} usePresentation={usePresentation}
               useDisclosure={useDisclosure} t={t} />
           </ProcessReasoning>,
         )

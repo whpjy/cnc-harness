@@ -15,7 +15,6 @@ RUN apt-get update \
 
 WORKDIR /opt/deepseek-harness
 COPY deepseek-harness-cnc/ ./
-COPY seksun-cnc/apps/api/app/ /opt/seksun-cnc-api/app/
 
 RUN --mount=type=cache,id=deepseek-harness-pnpm,target=/pnpm/store \
     pnpm config set store-dir /pnpm/store \
@@ -23,9 +22,14 @@ RUN --mount=type=cache,id=deepseek-harness-pnpm,target=/pnpm/store \
     && pnpm --dir native/system run build:native \
     && node --max-old-space-size=4096 ./node_modules/typescript/bin/tsc -b tsconfig.host.json \
     && pnpm exec tsdown --env.DSH_BUILD_FACE host \
+    && pnpm run build:lib:client \
     && pnpm run build:web \
     && mkdir -p /var/lib/deepseek-harness /workspace \
     && chown -R node:node /var/lib/deepseek-harness /workspace
+
+# CNC MCP changes independently from the Harness application. Keep it after
+# the expensive frontend/native build so backend policy edits reuse that layer.
+COPY seksun-cnc/apps/api/app/ /opt/seksun-cnc-api/app/
 
 USER node
 WORKDIR /workspace

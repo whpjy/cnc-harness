@@ -11,6 +11,8 @@ English | [中文](README.zh.md)
 
 Adds compact, business-readable views for CNC MCP calls and a right-side engineering workspace. A completed CNC tool call can open the matching job without exposing raw JSON in the conversation.
 
+The workspace keeps one embedded CNC page alive for the active job. Later tool calls update the job without resetting the engineer's selected stage; changing jobs initializes the new job at the stage requested by its first tool call.
+
 ## Use this package
 
 Mount the client plugin after the standard Tool and right-Sidebar plugins. CNC job pages default to `http://127.0.0.1:3001`; set the browser-local `cnc.baseUrl` value to use another CNC frontend origin.

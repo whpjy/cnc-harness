@@ -3,6 +3,7 @@ import type { ProcessActivity, ProcessActivitySummary } from '../contract/proces
 import type { ChatNode } from '../contract/chat-nodes.ts'
 import { isRunningTool } from '../contract/chat-nodes.ts'
 import type { ToolCallBlock } from '../contract/snapshot.ts'
+import { toSimplifiedChinese } from '../simplified-chinese.ts'
 
 function activity(name: string): ProcessActivity {
   if (name === 'read') return 'read'
@@ -22,10 +23,50 @@ function activity(name: string): ProcessActivity {
 
 const LIVE_TOOL_DETAIL_MAX_CHARS = 160
 const LIVE_TOOL_DETAIL_SEGMENTER = new Intl.Segmenter(undefined, { granularity: 'grapheme' })
+const TOOL_DISPLAY_NAMES_ZH: Readonly<Record<string, string>> = {
+  create_job_from_step: '导入三维模型',
+  inspect_job_progress: '检查模型解析进度',
+  initialize_process_draft: '建立工艺草案',
+  inspect_operation_catalog: '查询候选工序',
+  inspect_tool_catalog: '查询刀具目录',
+  add_process_operation: '设计下一道工序',
+  trial_l32_operation: '试算单道工序',
+  accept_l32_operation_trial: '接受工序验证结果',
+  inspect_l32_operation_trial_state: '检查滚动规划状态',
+  evaluate_l32_operation_candidates: '比较工序修复方案',
+  auto_repair_l32_operation: '自动修复工序',
+  apply_l32_operation_candidate: '应用工序修复方案',
+  finalize_harness_process_plan: '执行整件工艺验证',
+  revise_process_operation: '修正工序方案',
+  remove_process_operation: '移除工序',
+  reorder_process_operations: '调整工序顺序',
+  open_job_context: '打开 CNC 任务',
+  inspect_job: '查看 CNC 任务',
+  inspect_geometry: '分析制造几何',
+  inspect_l32_profile_review_request: '检查回转轮廓审核请求',
+  provisionally_accept_l32_profile: '临时接受回转轮廓',
+  inspect_machine: '检查机床与刀具能力',
+  observe_model: '观察三维模型',
+  inspect_validation: '检查仿真验证结果',
+  validate_l32_plan: '验证 L32 工艺方案',
+  inspect_l32_operation_loop: '检查工序规划闭环',
+  advance_l32_operation: '推进下一道工序',
+  inspect_l32_repair_options: '查看工序修复选项',
+  select_l32_repair_candidate: '选择工序修复方案',
+}
 const LIVE_TOOL_DETAIL_KEYS = [
   'title', 'description', 'objective', 'task', 'task_name', 'name', 'question', 'questions', 'prompt', 'message',
   'command', 'cmd', 'queries', 'query', 'pattern', 'url', 'uri', 'file_path', 'path', 'target', 'action', 'status',
 ] as const
+
+function toolDisplayName(name: string): string {
+  const operation = name.split('__').at(-1) ?? name
+  const translated = TOOL_DISPLAY_NAMES_ZH[operation]
+  if (translated !== undefined) return translated
+  if (name.includes('__cnc__') || name.startsWith('mcp_cnc__')) return 'CNC 制造工具'
+  if (name.startsWith('mcp__') || name.startsWith('mcp_')) return '外部工具'
+  return name
+}
 
 function normalizeLiveToolDetail(value: unknown): string {
   const text = typeof value === 'string'
@@ -33,7 +74,7 @@ function normalizeLiveToolDetail(value: unknown): string {
     : Array.isArray(value) && value.every(item => typeof item === 'string')
       ? value.join(', ')
       : ''
-  const normalized = text.replace(/\s+/g, ' ').trim()
+  const normalized = toSimplifiedChinese(text.replace(/\s+/g, ' ').trim())
   const chars = Array.from(LIVE_TOOL_DETAIL_SEGMENTER.segment(normalized), part => part.segment)
   return chars.length <= LIVE_TOOL_DETAIL_MAX_CHARS
     ? normalized
@@ -73,9 +114,9 @@ function liveToolDetail(name: string, argsRaw: string): string {
     args = JSON.parse(argsRaw)
   } catch (_error: unknown) {
     // Partial or free-form arguments have no safe one-line task detail.
-    return normalizeLiveToolDetail(name)
+    return toolDisplayName(name)
   }
-  if (args === null || typeof args !== 'object') return normalizeLiveToolDetail(name)
+  if (args === null || typeof args !== 'object') return toolDisplayName(name)
   for (const key of LIVE_TOOL_DETAIL_KEYS) {
     if (key in args) {
       const value: unknown = Reflect.get(args, key)
@@ -83,7 +124,7 @@ function liveToolDetail(name: string, argsRaw: string): string {
       if (detail !== '') return detail
     }
   }
-  return normalizeLiveToolDetail(name)
+  return toolDisplayName(name)
 }
 
 /**
@@ -108,7 +149,7 @@ export function processActivity(nodes: readonly ChatNode[]): ProcessActivitySumm
         running = kind
         preparing = tool.phase === 'preparing'
         runningDetail = tool.phase === 'preparing'
-          ? kind === 'tools' ? tool.name : ''
+          ? kind === 'tools' ? toolDisplayName(tool.name) : ''
           : liveToolDetail(tool.name, tool.argsRaw)
         runningTime = tool.time
       }

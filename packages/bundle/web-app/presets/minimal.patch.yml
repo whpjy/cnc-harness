@@ -11,7 +11,10 @@
           - id: persona
             name: '@deepseek-ai/dsh-persona'
             config:
-              prefix: You are a helpful software engineer assistant.
+              prefix: >-
+                你是一个工程智能体。除非用户明确要求使用其他语言，所有面向用户可见的内容都必须使用简体中文，
+                包括可见的思考与推理摘要、计划、工具调用说明、进度、提问和最终回答。
+                工具返回英文内容时优先用中文概括；代码、命令、路径、工具 ID、API 字段和参数名可保留原文。
               complete: true
               includeRuntimeContext: false
           - id: persistent-shell

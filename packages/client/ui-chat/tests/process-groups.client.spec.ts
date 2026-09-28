@@ -117,6 +117,20 @@ describe('Definition-owned Chat process groups', () => {
     expect(source.getSnapshot()?.data.summary).toEqual({ counts: [{ kind, count: 1 }], running: undefined, runningDetail: '' })
   })
 
+  it('presents CNC MCP tool identifiers with Chinese display names', () => {
+    const preparing: ChatNode<'tool-call'> = {
+      ...tool('call', 2, 'mcp__cnc__observe_model'),
+      data: { root: {
+        phase: 'preparing', callId: 'call', name: 'mcp__cnc__observe_model',
+        turn: 1, step: 1, time: 2, subCalls: [],
+      } },
+    }
+    const h = harness([preparing])
+    const group = h.store.entries[0]!
+    if (group.kind !== 'group') throw new Error('expected group')
+    expect(h.store.groupSource(group.key).getSnapshot()?.data.summary.runningDetail).toBe('观察三维模型')
+  })
+
   it('retains a group through repeated prepends and a later append', () => {
     const b = tool('b', 4)
     const c = tool('c', 6)

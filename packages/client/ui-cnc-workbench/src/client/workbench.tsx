@@ -94,7 +94,12 @@ function WorkbenchBody({ useTabInfo }: WorkbenchBodyProps): ReactNode {
   const { tab } = useTabInfo()
   const params = (tab.navigation.params ?? {}) as WorkbenchParams
   const [selected, setSelected] = useState<WorkbenchStage>(params.stage ?? 'model')
-  useEffect(() => { setSelected(params.stage ?? 'model') }, [params.stage, tab.navigation.revision])
+  const activeJobId = useRef(params.jobId)
+  useEffect(() => {
+    if (activeJobId.current === params.jobId) return
+    activeJobId.current = params.jobId
+    setSelected(params.stage ?? 'model')
+  }, [params.jobId, params.stage])
   const url = params.jobId === undefined ? undefined : jobUrl(params.jobId, selected)
 
   return (
@@ -126,7 +131,6 @@ function WorkbenchBody({ useTabInfo }: WorkbenchBodyProps): ReactNode {
             <p>上传 STEP 后，模型理解、工序、刀路和仿真会随着智能体调用实时进入这里。</p>
           </div>
           : <iframe
-            key={`${params.jobId}:${selected}`}
             title="CNC 工程现场"
             src={url}
             sandbox="allow-scripts allow-same-origin allow-forms allow-downloads"
