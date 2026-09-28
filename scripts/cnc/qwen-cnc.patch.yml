@@ -41,6 +41,10 @@
     model: qwen3.8-flash
     reasoningEffort: high
 
+- id: ui-settings-models
+  config:
+    welcomeNotice: false
+
 - id: system-prompt
   config:
     personaPrefix: >-

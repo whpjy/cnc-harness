@@ -6,6 +6,10 @@ const internalPort = 3080
 const publicPort = 3081
 const cli = '/opt/deepseek-harness/apps/cli/lib/bin.js'
 const patch = '/opt/deepseek-harness/scripts/cnc/qwen-cnc.docker.patch.yml'
+const deploymentTrustedHosts = (process.env.DSH_TRUSTED_HOSTS ?? '')
+  .split(',')
+  .map(host => host.trim())
+  .filter(Boolean)
 
 const child = spawn(process.execPath, [
   cli,
@@ -15,6 +19,7 @@ const child = spawn(process.execPath, [
   '--host', '127.0.0.1',
   '--port', String(internalPort),
   '--trusted-host', `127.0.0.1:${publicPort}`,
+  ...deploymentTrustedHosts.flatMap(host => ['--trusted-host', host]),
 ], {
   env: process.env,
   stdio: ['inherit', 'pipe', 'pipe'],

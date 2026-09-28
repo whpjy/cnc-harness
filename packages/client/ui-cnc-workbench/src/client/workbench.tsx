@@ -78,9 +78,32 @@ function jobIdOf(props: ToolCallViewProps): string | undefined {
   return argMatch ?? resultText(props).match(JOB_ID)?.[0]
 }
 
+function isLoopback(hostname: string): boolean {
+  return hostname === '127.0.0.1' || hostname === 'localhost' || hostname === '::1'
+}
+
+function deployedCncOrigin(): string {
+  const location = globalThis.location
+  if (location === undefined || location.hostname === '') return 'http://127.0.0.1:3001'
+  const hostname = location.hostname.includes(':') ? `[${location.hostname}]` : location.hostname
+  return `${location.protocol}//${hostname}:3001`
+}
+
 function cncOrigin(): string {
   const configured = globalThis.localStorage?.getItem('cnc.baseUrl')?.trim()
-  return configured !== undefined && configured !== '' ? configured.replace(/\/$/u, '') : 'http://127.0.0.1:3001'
+  if (configured !== undefined && configured !== '') {
+    try {
+      const configuredUrl = new URL(configured)
+      // A loopback preference saved during local development must not send a
+      // remote Harness deployment back to the operator's own computer.
+      if (!isLoopback(configuredUrl.hostname) || isLoopback(globalThis.location?.hostname ?? '')) {
+        return configured.replace(/\/$/u, '')
+      }
+    } catch {
+      // Ignore malformed legacy preferences and use the deployment address.
+    }
+  }
+  return deployedCncOrigin()
 }
 
 function jobUrl(jobId: string, stage: WorkbenchStage): string {

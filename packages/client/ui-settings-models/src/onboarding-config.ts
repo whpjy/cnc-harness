@@ -4,12 +4,15 @@ import z from '@deepseek-ai/schemastery'
 
 /** Onboarding options after schema defaults are applied. */
 export interface Config {
+  /** Show the versioned internal-testing notice before the rest of onboarding. */
+  welcomeNotice: boolean
   /** Offer the browser API-key step when no native shell owns credential onboarding. */
   credentialOnboarding: boolean
 }
 
 /** Validate Host configuration and its public page-bootstrap payload. */
 export const Config: z<Partial<Config>, Config> = z.object({
+  welcomeNotice: z.boolean().default(true),
   credentialOnboarding: z.boolean().default(true),
 })
 

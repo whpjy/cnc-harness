@@ -15,7 +15,7 @@ The workspace keeps one embedded CNC page alive for the active job. Later tool c
 
 ## Use this package
 
-Mount the client plugin after the standard Tool and right-Sidebar plugins. CNC job pages default to `http://127.0.0.1:3001`; set the browser-local `cnc.baseUrl` value to use another CNC frontend origin.
+Mount the client plugin after the standard Tool and right-Sidebar plugins. CNC job pages default to port `3001` on the current Harness host (and `http://127.0.0.1:3001` for a loopback Harness); set the browser-local `cnc.baseUrl` value to use another CNC frontend origin. Remote deployments ignore a legacy loopback preference so they do not accidentally embed an old CNC instance running on the operator's computer.
 
 ## Model Experience
 
