@@ -39,7 +39,7 @@
   config:
     provider: dashscope-qwen
     model: qwen3.8-flash
-    reasoningEffort: high
+    reasoningEffort: medium
 
 - id: ui-settings-models
   config:

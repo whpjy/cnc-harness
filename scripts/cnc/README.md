@@ -2,6 +2,8 @@
 
 These Windows scripts pin the durable configuration root to the current user's `~/.dsh` and apply `qwen-cnc.patch.yml` on every launch. The model catalog therefore does not depend on a transient shell environment or working directory. API keys remain only in the Harness credential store and never enter the repository.
 
+The Windows and Docker overlays select `qwen3.8-flash` with `medium` reasoning effort as the default CNC agent model.
+
 ```powershell
 pnpm run cnc:web:start
 pnpm run cnc:web:status
